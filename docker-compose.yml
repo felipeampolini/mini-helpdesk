@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mini_helpdesk_app
+    volumes:
+      - ./backend:/var/www/html/backend
+    ports:
+      - "8000:80"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:15
+    container_name: mini_helpdesk_db
+    environment:
+      POSTGRES_DB: mini_helpdesk
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
