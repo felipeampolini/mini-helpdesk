@@ -85,10 +85,10 @@ docker compose exec app php artisan key:generate
 
 ---
 
-### 6. Rodar as migrations
+### 6. Rodar as migrations junto com os seeders
 
 ```bash
-docker compose exec app php artisan migrate
+docker compose exec app php artisan migrate --seed
 ```
 
 ---
