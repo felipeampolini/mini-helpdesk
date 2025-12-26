@@ -112,6 +112,12 @@ O projeto utiliza **Laravel Breeze** para autenticação:
 - Logout
 - Gerenciamento de sessões via banco de dados
 
+## Login de usuario Manager
+
+Email: `manager@email.com`
+
+Senha: `123123123`
+
 ---
 
 ## Licença
