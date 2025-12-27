@@ -95,6 +95,7 @@ docker compose exec app php artisan migrate --seed
 
 ```bash
 docker compose exec app chown -R www-data:www-data storage bootstrap/cache
+docker compose exec app chmod -R 775 storage
 ```
 
 ---
