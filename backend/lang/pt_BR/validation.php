@@ -13,4 +13,5 @@ return [
         'email' => 'e-mail',
         'password' => 'senha',
     ],
+    'current_password' => 'A senha atual informada está incorreta.',
 ];
