@@ -31,3 +31,14 @@ Limpa cache de eventos e listeners (não existe comando direto, mas reiniciar o 
 ```bash
 php artisan event:clear
 ```
+
+--- 
+
+Rodar tudo de uma vez
+
+```bash
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan event:clear
+```
