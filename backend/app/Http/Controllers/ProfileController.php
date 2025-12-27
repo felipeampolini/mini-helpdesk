@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserDestroyed;
+use App\Events\UserUpdated;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,7 +34,9 @@ class ProfileController extends Controller
             $request->user()->email_verified_at = null;
         }
 
-        $request->user()->save();
+        if($request->user()->save()){
+            event(new UserUpdated($request->user()));
+        }
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -49,6 +53,8 @@ class ProfileController extends Controller
         $user = $request->user();
 
         Auth::logout();
+
+        event(new UserDestroyed($user));
 
         $user->delete();
 

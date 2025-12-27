@@ -2,12 +2,12 @@
 
 namespace App\Listeners;
 
-use Illuminate\Auth\Events\Registered;
+use App\Events\UserDestroyed;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Log;
+use Log;
 
-class LogNewUserRegistered
+class LogUserDestroyed
 {
     /**
      * Create the event listener.
@@ -20,9 +20,13 @@ class LogNewUserRegistered
     /**
      * Handle the event.
      */
-    public function handle(Registered $event): void
+    public function handle(UserDestroyed $event): void
     {
         $user = $event->user;
-        Log::info("Novo usuário registrado: {$user->id} - {$user->email}");
+
+        Log::info("Usuário [ID: {$user->id}, Email: {$user->email}] deletou a conta", [
+            'ip' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+        ]);
     }
 }
