@@ -2,14 +2,8 @@
 
 namespace App\Providers;
 
-use App\Events\UserPasswordChanged;
-use App\Listeners\LogUserPasswordChanged;
-use App\Listeners\LogUserPasswordReset;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
-use App\Listeners\LogUserRegistered;
-use Illuminate\Auth\Events\Registered;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -19,15 +13,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        Registered::class => [
-            LogUserRegistered::class,
+        \Illuminate\Notifications\Events\NotificationSent::class => [
+            \App\Listeners\LogNotificationsSent::class,
         ],
-        UserPasswordChanged::class => [
-            LogUserPasswordChanged::class,
-        ],
-        PasswordReset::class => [
-            LogUserPasswordReset::class,
-        ]
     ];
 
     /**
