@@ -37,7 +37,7 @@ class ResetPasswordNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $url = url(route('password.reset', ['token' => $this->token, 'email' => $notifiable->getEmailForPasswordReset()]));
-        $appName = env('APP_NAME');
+        $appName = config('app.name');
 
         return (new MailMessage)
             ->subject('Redefinição de senha - '.$appName)
