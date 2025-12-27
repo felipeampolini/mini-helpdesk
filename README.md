@@ -91,6 +91,12 @@ docker compose exec app php artisan key:generate
 docker compose exec app php artisan migrate --seed
 ```
 
+### 7. Concede permissoes
+
+```bash
+docker compose exec app chown -R www-data:www-data storage bootstrap/cache
+```
+
 ---
 
 ## Acesso à aplicação
@@ -117,6 +123,31 @@ O projeto utiliza **Laravel Breeze** para autenticação:
 Email: `manager@email.com`
 
 Senha: `123123123`
+
+---
+
+## Envio de Emails (Ambiente de Desenvolvimento)
+
+Este projeto utiliza o sistema de emails do Laravel para funcionalidades como recuperação de senha, verificação de email entre outras.
+
+Em ambiente de desenvolvimento, é recomendado o uso do **Mailtrap**, que permite capturar emails enviados pela aplicação sem entregá-los a endereços reais.
+
+### Exemplo de configuração
+
+No arquivo `.env`, utilize uma configuração semelhante a esta:
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+As credenciais podem ser obtidas gratuitamente em https://mailtrap.io
 
 ---
 
