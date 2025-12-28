@@ -108,7 +108,7 @@ class TicketTable extends Component
                     $condition($query);
                 }
             })
-            ->paginate(15);
+            ->paginate(10);
 
         return view('livewire.ticket-table', ['tickets' => $tickets]);
     }
