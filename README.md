@@ -19,8 +19,9 @@ Projeto **Mini Helpdesk** desenvolvido com Laravel, utilizando Docker para padro
 - PHPUnit (testes)
 
 ### Frontend
-- Blade
-- Tailwind CSS
+- Blade (views)
+- Tailwind CSS (estilização)
+- Livewire (componentes reativos)
 - Vite
 - Node.js
 - NPM
@@ -65,6 +66,7 @@ docker compose up -d
 docker compose exec app composer install --no-interaction --optimize-autoloader
 docker compose exec app npm install
 docker compose exec app npm run build
+docker compose exec app php artisan livewire:publish --assets
 ```
 
 ---
