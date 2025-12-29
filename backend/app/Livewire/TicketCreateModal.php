@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Http\Requests\StoreTicketRequest;
 use App\Models\Ticket;
+use Illuminate\Auth\Access\AuthorizationException;
 use Livewire\Component;
 use Validator;
 
@@ -15,7 +16,17 @@ class TicketCreateModal extends Component
 
     public function createTicket()
     {
-        $this->authorize('create', Ticket::class);
+        try {
+            $this->authorize('create', \App\Models\Ticket::class);
+        } catch (AuthorizationException $e) {
+            $this->dispatch('notify', [
+                'type' => 'danger',
+                'message' => 'Você não tem permissão para criar tickets.'
+            ]);
+            $this->dispatch('close-modal', 'new-ticket-modal');
+
+            return;
+        }
 
         $validated = Validator::make(
             $this->only(
