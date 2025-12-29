@@ -5,6 +5,11 @@ return [
     'filters' => 'Filtros',
     'clean_search' => 'Limpar',
 
+    'title_placeholder' => 'Digite um título',
+    'description_placeholder' => 'Digite uma descrição',
+    'priority_select' => 'Selecione uma prioridade',
+    'create' => 'Salvar',
+
     'search_ticket' => 'Buscar ticket',
     'search_ticket_placeholder' => "Digite um título",
 
@@ -31,9 +36,13 @@ return [
 
     'id' => 'ID',
     'title' => 'Título',
+    'description' => 'Descrição',
     'status' => 'Status',
     'priority' => 'Prioridade',
     'owner' => 'Dono',
     'created_at' => 'Criado em',
     'actions' => 'Ações',
+
+    'loading' => 'Carregando...',
+
 ];

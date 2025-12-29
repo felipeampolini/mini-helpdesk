@@ -25,6 +25,8 @@ class TicketTable extends Component
     public $dateFrom = '';
     public $dateTo = '';
 
+    protected $listeners = ['ticketCreated' => 'refreshTickets'];
+
     public function clearSearch()
     {
         $this->sortField = 'created_at';
@@ -151,4 +153,10 @@ class TicketTable extends Component
 
         return $count;
     }
+
+    public function refreshTickets()
+    {
+        $this->resetPage();
+    }
+
 }

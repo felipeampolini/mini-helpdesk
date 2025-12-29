@@ -1,9 +1,11 @@
 <div class="bg-white shadow-sm sm:rounded-lg p-6">
     <div class="mb-4 flex items-center gap-2">
-        <x-success-button>
-            <x-heroicon-o-plus class="w-5 h-5 mr-2" />
-            {{ __('ticket.new_ticket') }}
-        </x-success-button>
+        @can('create', App\Models\Ticket::class)
+            <x-success-button x-data x-on:click="$dispatch('open-modal', 'new-ticket-modal')">
+                <x-heroicon-o-plus class="w-5 h-5 mr-2" />
+                {{ __('ticket.new_ticket') }}
+            </x-success-button>
+        @endcan
         <x-secondary-button x-data x-on:click="$dispatch('open-modal', 'filters-modal')" >
             <x-heroicon-o-funnel class="w-5 h-5 mr-2" />
             {{ __('ticket.filters') }}
@@ -29,7 +31,7 @@
                         text-center max-w-max mx-auto my-auto mt-4">
                 <x-heroicon-o-arrow-path class="w-6 h-6 animate-spin text-gray-700" />
                 <span class="text-sm font-medium text-gray-700">
-                    Carregando...
+                    {{ __('ticket.loading') }}
                 </span>
             </div>
         </div>
@@ -119,6 +121,8 @@
     <div class="mt-4">
         {{ $tickets->links('vendor.pagination.custom') }}
     </div>
+
+    <livewire:ticket-create-modal />
 
     <x-modal name="filters-modal" focusable>
         <div class="p-6 space-y-4">

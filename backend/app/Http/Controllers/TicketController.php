@@ -17,11 +17,12 @@ class TicketController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * A criação de tickets agora é feita via modal com Livewire,
+     * então não é necessário abrir uma tela separada.
      */
     public function create()
     {
-        //
+        return redirect()->route('tickets.index');
     }
 
     /**
