@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Events\TicketCreated;
 use App\Http\Requests\StoreTicketRequest;
 use App\Models\Ticket;
+use App\Services\Ticket\CreateTicketService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Livewire\Component;
 use Validator;
@@ -15,10 +16,10 @@ class TicketCreateModal extends Component
     public $description = '';
     public $priority = '';
 
-    public function createTicket()
+    public function createTicket(CreateTicketService $service)
     {
         try {
-            $this->authorize('create', \App\Models\Ticket::class);
+            $this->authorize('create', Ticket::class);
         } catch (AuthorizationException $e) {
             $this->dispatch('notify', [
                 'type' => 'danger',
@@ -35,11 +36,7 @@ class TicketCreateModal extends Component
                 (new StoreTicketRequest())->rules()
         )->validate();
 
-        $validated['status'] = 'open';
-
-        $ticket = auth()->user()->tickets()->create($validated);
-
-        event(new TicketCreated($ticket));
+        $ticket = $service->execute($validated);
 
         $this->reset(['title', 'description', 'priority']);
         $this->dispatch('close-modal', 'new-ticket-modal');
