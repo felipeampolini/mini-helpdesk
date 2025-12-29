@@ -137,4 +137,18 @@ class TicketTable extends Component
             ->get()
             ->toArray();
     }
+
+    public function getActiveFiltersCountProperty(): int
+    {
+        $count = 0;
+
+        $count += (int) (bool) $this->search;
+        $count += (int) (bool) $this->owner;
+        $count += (int) (bool) $this->filterStatus;
+        $count += (int) (bool) $this->filterPriority;
+        $count += (int) (bool) $this->dateFrom;
+        $count += (int) (bool) $this->dateTo;
+
+        return $count;
+    }
 }

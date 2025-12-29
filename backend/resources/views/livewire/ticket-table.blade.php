@@ -1,87 +1,20 @@
 <div class="bg-white shadow-sm sm:rounded-lg p-6">
-    <div class="mb-4">
-        <!-- Row 1: filtros principais -->
-        <div class="flex flex-wrap gap-4 items-end">
-
-            <!-- Busca por título -->
-            <div class="flex flex-col flex-1 min-w-[150px]">
-                <label for="search" class="text-sm font-medium mb-1">{{ __('ticket.search_ticket') }}:</label>
-                <input id="search" type="text"
-                    wire:model="search" wire:key="search-input-{{ $search }}"
-                    placeholder="Digite um título"
-                    class="border rounded px-3 py-2 w-full">
-            </div>
-
-            <!-- Filtro de dono -->
-            <div class="flex flex-col flex-1 min-w-[150px]">
-                <label for="owner" class="text-sm font-medium mb-1">{{ __('ticket.search_owner') }}:</label>
-                <input id="owner" type="text"
-                    wire:model="owner" wire:key="owner-input-{{ $owner }}"
-                    placeholder="Digite um nome"
-                    class="border rounded px-3 py-2 w-full">
-            </div>
-
-            <!-- Filtro de status -->
-            <div class="flex flex-col flex-1 min-w-[120px]">
-                <label for="filterStatus" class="text-sm font-medium mb-1">{{ __('ticket.filter_status') }}:</label>
-                <select id="filterStatus" wire:model="filterStatus" wire:key="filter-status-{{ $filterStatus }}"
-                    class="border rounded px-3 py-2 w-full">
-                    <option value="">{{ __('ticket.status_all') }}</option>
-                    <option value="open">{{ __('ticket.status_open') }}</option>
-                    <option value="in_progress">{{ __('ticket.status_in_progress') }}</option>
-                    <option value="closed">{{ __('ticket.status_closed') }}</option>
-                </select>
-            </div>
-
-            <!-- Filtro de prioridade -->
-            <div class="flex flex-col flex-1 min-w-[120px]">
-                <label for="filterPriority" class="text-sm font-medium mb-1">{{ __('ticket.filter_priority') }}:</label>
-                <select id="filterPriority" wire:model="filterPriority" wire:key="filter-priority-{{ $filterPriority }}"
-                    class="border rounded px-3 py-2 w-full">
-                    <option value="">{{ __('ticket.priority_all') }}</option>
-                    <option value="low">{{ __('ticket.priority_low') }}</option>
-                    <option value="medium">{{ __('ticket.priority_medium') }}</option>
-                    <option value="high">{{ __('ticket.priority_high') }}</option>
-                </select>
-            </div>
-
-        </div>
-
-        <!-- Row 2: filtros de datas + botões -->
-        <div class="flex flex-wrap gap-4 items-end mt-2">
-
-            <!-- Filtro de data: De -->
-            <div class="flex flex-col flex-1 min-w-[180px]">
-                <label for="dateFrom" class="text-sm font-medium mb-1">{{ __('ticket.create_date_from') }}:</label>
-                <input id="dateFrom" type="datetime-local"
-                    wire:model="dateFrom" wire:key="date-from-{{ $dateFrom }}"
-                    class="border rounded px-3 py-2 w-full">
-            </div>
-
-            <!-- Filtro de data: Até -->
-            <div class="flex flex-col flex-1 min-w-[180px]">
-                <label for="dateTo" class="text-sm font-medium mb-1">{{ __('ticket.create_date_to') }}:</label>
-                <input id="dateTo" type="datetime-local"
-                    wire:model="dateTo" wire:key="date-to-{{ $dateTo }}"
-                    class="border rounded px-3 py-2 w-full">
-            </div>
-
-            <!-- Botões -->
-            <div class="flex gap-2 ml-auto mt-2 sm:mt-0">
-                <button type="button"
-                    wire:click="clearSearch"
-                    class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 whitespace-nowrap">
-                    {{ __('ticket.clean_search') }}
-                </button>
-
-                <button type="button"
-                    wire:click="searchTickets"
-                    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 whitespace-nowrap">
-                    🔍 {{ __('ticket.search') }}
-                </button>
-            </div>
-
-        </div>
+    <div class="mb-4 flex items-center gap-2">
+        <x-success-button>
+            <x-heroicon-o-plus class="w-5 h-5 mr-2" />
+            {{ __('ticket.new_ticket') }}
+        </x-success-button>
+        <x-secondary-button x-data x-on:click="$dispatch('open-modal', 'filters-modal')" >
+            <x-heroicon-o-funnel class="w-5 h-5 mr-2" />
+            {{ __('ticket.filters') }}
+            @if ($this->activeFiltersCount > 0)
+                ({{ $this->activeFiltersCount }})
+            @endif
+        </x-secondary-button>
+        <x-danger-button wire:click="clearSearch">
+            <x-heroicon-o-trash class="w-5 h-5 mr-2" />
+            {{ __('ticket.clean_search') }}
+        </x-danger-button>
     </div>
 
     <div class="overflow-x-auto">
@@ -89,28 +22,52 @@
             <thead>
                 <tr>
                     <th wire:click="sortBy('id')" class="py-2 px-4 border-b text-left cursor-pointer">
-                        {{ __('ticket.id') }}
-                        @if($sortField === 'id') @if($sortDirection === 'asc') ▲ @else ▼ @endif @endif
+                        <x-sortable-th
+                            label="{{ __('ticket.id') }}"
+                            field="id"
+                            :sortField="$sortField"
+                            :sortDirection="$sortDirection"
+                        />
                     </th>
                     <th wire:click="sortBy('title')" class="py-2 px-4 border-b text-left cursor-pointer">
-                        {{ __('ticket.title') }}
-                        @if($sortField === 'title') @if($sortDirection === 'asc') ▲ @else ▼ @endif @endif
+                        <x-sortable-th
+                            label="{{ __('ticket.title') }}"
+                            field="title"
+                            :sortField="$sortField"
+                            :sortDirection="$sortDirection"
+                        />
                     </th>
                     <th wire:click="sortBy('status')" class="py-2 px-4 border-b text-center cursor-pointer">
-                        {{ __('ticket.status') }}
-                        @if($sortField === 'status') @if($sortDirection === 'asc') ▲ @else ▼ @endif @endif
+                        <x-sortable-th
+                            label="{{ __('ticket.status') }}"
+                            field="status"
+                            :sortField="$sortField"
+                            :sortDirection="$sortDirection"
+                        />
                     </th>
                     <th wire:click="sortBy('priority')" class="py-2 px-4 border-b text-center cursor-pointer">
-                        {{ __('ticket.priority') }}
-                        @if($sortField === 'priority') @if($sortDirection === 'asc') ▲ @else ▼ @endif @endif
+                        <x-sortable-th
+                            label="{{ __('ticket.priority') }}"
+                            field="priority"
+                            :sortField="$sortField"
+                            :sortDirection="$sortDirection"
+                        />
                     </th>
                     <th wire:click="sortBy('owner')" class="py-2 px-4 border-b text-center cursor-pointer">
-                        {{ __('ticket.owner') }}
-                        @if($sortField === 'owner') @if($sortDirection === 'asc') ▲ @else ▼ @endif @endif
+                        <x-sortable-th
+                            label="{{ __('ticket.owner') }}"
+                            field="owner"
+                            :sortField="$sortField"
+                            :sortDirection="$sortDirection"
+                        />
                     </th>
                     <th wire:click="sortBy('created_at')" class="py-2 px-4 border-b text-center cursor-pointer">
-                        {{ __('ticket.created_at') }}
-                        @if($sortField === 'created_at') @if($sortDirection === 'asc') ▲ @else ▼ @endif @endif
+                        <x-sortable-th
+                            label="{{ __('ticket.created_at') }}"
+                            field="created_at"
+                            :sortField="$sortField"
+                            :sortDirection="$sortDirection"
+                        />
                     </th>
                     <th class="py-2 px-4 border-b text-center">{{ __('ticket.actions') }}</th>
                 </tr>
@@ -144,4 +101,143 @@
     <div class="mt-4">
         {{ $tickets->links('vendor.pagination.custom') }}
     </div>
+
+    <x-modal name="filters-modal" focusable>
+        <div class="p-6 space-y-4">
+
+            <span class="inline-flex items-center gap-1 select-none">
+                <x-heroicon-o-funnel class="w-5 h-5 mr-2" />
+                <h2 class="text-lg font-medium text-gray-900 flex">
+                    {{ __('ticket.filters') }}
+                </h2>
+            </span>
+
+            <!-- Busca por título -->
+            <div class="flex flex-col mt-2">
+                <x-input-label for="search" :value="__('ticket.search_ticket')" />
+                <x-text-input
+                    id="search"
+                    wire:model="search"
+                    class="block mt-1 w-full"
+                    :placeholder="__('ticket.search_ticket_placeholder')" />
+            </div>
+
+            <!-- Dono -->
+            <div class="flex flex-col mt-2">
+                <x-input-label for="owner" :value="__('ticket.search_owner')" />
+                <x-text-input
+                    id="owner"
+                    wire:model="owner"
+                    class="block mt-1 w-full"
+                    :placeholder="__('ticket.search_owner_placeholder')" />
+            </div>
+
+            <!-- Status -->
+            <div class="flex flex-col mt-2" x-data="{ selected: @entangle('filterStatus') }">
+                <x-input-label :value="__('ticket.filter_status')" />
+
+                <x-dropdown align="left" width="48">
+                    <x-slot name="trigger">
+                        <button type="button" class="border rounded px-3 py-2 w-full text-left">
+                            <span
+                                x-text="
+                                    selected === 'open' ? '{{ __('ticket.status_open') }}' :
+                                    selected === 'in_progress' ? '{{ __('ticket.status_in_progress') }}' :
+                                    selected === 'closed' ? '{{ __('ticket.status_closed') }}' :
+                                    '{{ __('ticket.status_all') }}'
+                                "
+                            ></span>
+                        </button>
+                    </x-slot>
+
+                    <x-slot name="content">
+                        <x-dropdown-link href="#" @click.prevent="selected = ''">
+                            {{ __('ticket.status_all') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link href="#" @click.prevent="selected = 'open'">
+                            {{ __('ticket.status_open') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link href="#" @click.prevent="selected = 'in_progress'">
+                            {{ __('ticket.status_in_progress') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link href="#" @click.prevent="selected = 'closed'">
+                            {{ __('ticket.status_closed') }}
+                        </x-dropdown-link>
+                    </x-slot>
+                </x-dropdown>
+            </div>
+
+            <!-- Prioridade -->
+            <div class="flex flex-col mt-2" x-data="{ selected: @entangle('filterPriority') }">
+                <x-input-label :value="__('ticket.filter_priority')" />
+
+                <x-dropdown align="left" width="48">
+                    <x-slot name="trigger">
+                        <button type="button" class="border rounded px-3 py-2 w-full text-left">
+                            <span
+                                x-text="
+                                    selected === 'high' ? '{{ __('ticket.priority_high') }}' :
+                                    selected === 'medium' ? '{{ __('ticket.priority_medium') }}' :
+                                    selected === 'low' ? '{{ __('ticket.priority_low') }}' :
+                                    '{{ __('ticket.priority_all') }}'
+                                "
+                            ></span>
+                        </button>
+                    </x-slot>
+
+                    <x-slot name="content">
+                        <x-dropdown-link href="#" @click.prevent="selected = ''">
+                            {{ __('ticket.priority_all') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link href="#" @click.prevent="selected = 'high'">
+                            {{ __('ticket.priority_high') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link href="#" @click.prevent="selected = 'medium'">
+                            {{ __('ticket.priority_medium') }}
+                        </x-dropdown-link>
+                        <x-dropdown-link href="#" @click.prevent="selected = 'low'">
+                            {{ __('ticket.priority_low') }}
+                        </x-dropdown-link>
+                    </x-slot>
+                </x-dropdown>
+            </div>
+
+            <!-- Datas -->
+            <div class="flex flex-col mt-2">
+                <x-input-label for="dateFrom" :value="__('ticket.create_date_from')" />
+                <x-text-input
+                    id="dateFrom"
+                    type="datetime-local"
+                    wire:model="dateFrom"
+                    class="block w-full" />
+            </div>
+
+            <div class="flex flex-col mt-2">
+                <x-input-label for="dateTo" :value="__('ticket.create_date_to')" />
+                <x-text-input
+                    id="dateTo"
+                    type="datetime-local"
+                    wire:model="dateTo"
+                    class="block w-full" />
+            </div>
+
+            <!-- Ações -->
+            <div class="flex justify-end gap-2 pt-4">
+                <x-secondary-button
+                    x-on:click="$dispatch('close')"
+                >
+                    {{ __('ticket.close') }}
+                </x-secondary-button>
+
+                <x-primary-button
+                    wire:click="searchTickets"
+                    x-on:click="$dispatch('close')"
+                >
+                    <x-heroicon-o-magnifying-glass class="w-5 h-5 mr-2" /> {{ __('ticket.search') }}
+                </x-primary-button>
+            </div>
+
+        </div>
+    </x-modal>
+
 </div>
