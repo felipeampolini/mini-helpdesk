@@ -17,85 +17,103 @@
         </x-danger-button>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="w-full bg-white border border-gray-200">
-            <thead>
-                <tr>
-                    <th wire:click="sortBy('id')" class="py-2 px-4 border-b text-left cursor-pointer">
-                        <x-sortable-th
-                            label="{{ __('ticket.id') }}"
-                            field="id"
-                            :sortField="$sortField"
-                            :sortDirection="$sortDirection"
-                        />
-                    </th>
-                    <th wire:click="sortBy('title')" class="py-2 px-4 border-b text-left cursor-pointer">
-                        <x-sortable-th
-                            label="{{ __('ticket.title') }}"
-                            field="title"
-                            :sortField="$sortField"
-                            :sortDirection="$sortDirection"
-                        />
-                    </th>
-                    <th wire:click="sortBy('status')" class="py-2 px-4 border-b text-center cursor-pointer">
-                        <x-sortable-th
-                            label="{{ __('ticket.status') }}"
-                            field="status"
-                            :sortField="$sortField"
-                            :sortDirection="$sortDirection"
-                        />
-                    </th>
-                    <th wire:click="sortBy('priority')" class="py-2 px-4 border-b text-center cursor-pointer">
-                        <x-sortable-th
-                            label="{{ __('ticket.priority') }}"
-                            field="priority"
-                            :sortField="$sortField"
-                            :sortDirection="$sortDirection"
-                        />
-                    </th>
-                    <th wire:click="sortBy('owner')" class="py-2 px-4 border-b text-center cursor-pointer">
-                        <x-sortable-th
-                            label="{{ __('ticket.owner') }}"
-                            field="owner"
-                            :sortField="$sortField"
-                            :sortDirection="$sortDirection"
-                        />
-                    </th>
-                    <th wire:click="sortBy('created_at')" class="py-2 px-4 border-b text-center cursor-pointer">
-                        <x-sortable-th
-                            label="{{ __('ticket.created_at') }}"
-                            field="created_at"
-                            :sortField="$sortField"
-                            :sortDirection="$sortDirection"
-                        />
-                    </th>
-                    <th class="py-2 px-4 border-b text-center">{{ __('ticket.actions') }}</th>
-                </tr>
-            </thead>
+    <div class="relative">
+        <div
+            wire:loading.delay
+            wire:target="search, owner, filterStatus, filterPriority, dateFrom, dateTo, sortBy, clearSearch, page"
+            class="absolute inset-0 z-20 flex items-center justify-center bg-gray-900/30"
+        >
+            <div class="flex flex-col items-center justify-center gap-3
+                        bg-white/90 backdrop-blur
+                        px-6 py-4 rounded-lg shadow-lg
+                        text-center max-w-max mx-auto my-auto mt-4">
+                <x-heroicon-o-arrow-path class="w-6 h-6 animate-spin text-gray-700" />
+                <span class="text-sm font-medium text-gray-700">
+                    Carregando...
+                </span>
+            </div>
+        </div>
 
-            <tbody>
-                @foreach($tickets as $ticket)
-                    <tr class="hover:bg-gray-100">
-                        <td class="py-2 px-4 border-b text-left">{{ $ticket->id }}</td>
-                        <td class="py-2 px-4 border-b text-left">{{ $ticket->title }}</td>
-                        <td class="py-2 px-4 border-b text-center"><x-ticket-status :status="$ticket->status" /></td>
-                        <td class="py-2 px-4 border-b text-center"><x-ticket-priority :priority="$ticket->priority" /></td>
-                        <td class="py-2 px-4 border-b text-left">{{ $ticket->user->name }}</td>
-                        <td class="py-2 px-4 border-b text-center">{{ $ticket->created_at->format('d/m/Y H:i') }}</td>
-                        <td class="py-2 px-4 border-b text-center">
-                            <a href="{{ route('tickets.show', $ticket->id) }}" class="text-blue-500 hover:underline mr-2">
-                                Ver
-                            </a>
-                            @can('update', $ticket)
-                                <a href="{{ route('tickets.edit', $ticket->id) }}" class="text-green-500 hover:underline">
-                                    Editar
-                                </a>
-                            @endcan
-                        </td>
+        <div class="overflow-x-auto">
+            <table class="w-full bg-white border border-gray-200">
+                <thead>
+                    <tr>
+                        <th wire:click="sortBy('id')" class="py-2 px-4 border-b text-left cursor-pointer">
+                            <x-sortable-th
+                                label="{{ __('ticket.id') }}"
+                                field="id"
+                                :sortField="$sortField"
+                                :sortDirection="$sortDirection"
+                            />
+                        </th>
+                        <th wire:click="sortBy('title')" class="py-2 px-4 border-b text-left cursor-pointer">
+                            <x-sortable-th
+                                label="{{ __('ticket.title') }}"
+                                field="title"
+                                :sortField="$sortField"
+                                :sortDirection="$sortDirection"
+                            />
+                        </th>
+                        <th wire:click="sortBy('status')" class="py-2 px-4 border-b text-center cursor-pointer">
+                            <x-sortable-th
+                                label="{{ __('ticket.status') }}"
+                                field="status"
+                                :sortField="$sortField"
+                                :sortDirection="$sortDirection"
+                            />
+                        </th>
+                        <th wire:click="sortBy('priority')" class="py-2 px-4 border-b text-center cursor-pointer">
+                            <x-sortable-th
+                                label="{{ __('ticket.priority') }}"
+                                field="priority"
+                                :sortField="$sortField"
+                                :sortDirection="$sortDirection"
+                            />
+                        </th>
+                        <th wire:click="sortBy('owner')" class="py-2 px-4 border-b text-center cursor-pointer">
+                            <x-sortable-th
+                                label="{{ __('ticket.owner') }}"
+                                field="owner"
+                                :sortField="$sortField"
+                                :sortDirection="$sortDirection"
+                            />
+                        </th>
+                        <th wire:click="sortBy('created_at')" class="py-2 px-4 border-b text-center cursor-pointer">
+                            <x-sortable-th
+                                label="{{ __('ticket.created_at') }}"
+                                field="created_at"
+                                :sortField="$sortField"
+                                :sortDirection="$sortDirection"
+                            />
+                        </th>
+                        <th class="py-2 px-4 border-b text-center">{{ __('ticket.actions') }}</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody>
+                    @foreach($tickets as $ticket)
+                        <tr class="hover:bg-gray-100">
+                            <td class="py-2 px-4 border-b text-left">{{ $ticket->id }}</td>
+                            <td class="py-2 px-4 border-b text-left">{{ $ticket->title }}</td>
+                            <td class="py-2 px-4 border-b text-center"><x-ticket-status :status="$ticket->status" /></td>
+                            <td class="py-2 px-4 border-b text-center"><x-ticket-priority :priority="$ticket->priority" /></td>
+                            <td class="py-2 px-4 border-b text-left">{{ $ticket->user->name }}</td>
+                            <td class="py-2 px-4 border-b text-center">{{ $ticket->created_at->format('d/m/Y H:i') }}</td>
+                            <td class="py-2 px-4 border-b text-center">
+                                <a href="{{ route('tickets.show', $ticket->id) }}" class="text-blue-500 hover:underline mr-2">
+                                    Ver
+                                </a>
+                                @can('update', $ticket)
+                                    <a href="{{ route('tickets.edit', $ticket->id) }}" class="text-green-500 hover:underline">
+                                        Editar
+                                    </a>
+                                @endcan
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="mt-4">

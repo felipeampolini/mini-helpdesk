@@ -29,7 +29,7 @@ return [
     'close' => 'Fechar',
     'search' => 'Buscar',
 
-    'id' => 'Ticket ID',
+    'id' => 'ID',
     'title' => 'Título',
     'status' => 'Status',
     'priority' => 'Prioridade',
