@@ -159,4 +159,11 @@ class TicketTable extends Component
         $this->resetPage();
     }
 
+    public function updated($property)
+    {
+        if ($property !== 'page') {
+            $this->resetPage();
+        }
+    }
+
 }

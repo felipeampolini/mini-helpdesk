@@ -94,7 +94,7 @@
 
                 <tbody>
                     @foreach($tickets as $ticket)
-                        <tr class="hover:bg-gray-100">
+                        <tr class="hover:bg-gray-100" wire:key="item-{{ $ticket->id }}">
                             <td class="py-2 px-4 border-b text-left">{{ $ticket->id }}</td>
                             <td class="py-2 px-4 border-b text-left">{{ $ticket->title }}</td>
                             <td class="py-2 px-4 border-b text-center"><x-ticket-status :status="$ticket->status" /></td>
