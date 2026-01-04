@@ -1,6 +1,10 @@
 <?php
 
 return [
+
+    'ticket' => 'Ticket',
+    'tickets' => 'Tickets',
+
     'new_ticket' => 'Novo ticket',
     'filters' => 'Filtros',
     'clean_search' => 'Limpar',
@@ -43,6 +47,13 @@ return [
     'created_at' => 'Criado em',
     'actions' => 'Ações',
 
+    'access_ticket' => 'Acessar',
+
     'loading' => 'Carregando...',
+
+    'edit' => 'Editar',
+    'save' => 'Salvar',
+    'created_by' => 'Criado por',
+    'updated_at' => 'Atualizado em'
 
 ];

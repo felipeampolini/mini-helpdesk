@@ -102,14 +102,16 @@
                             <td class="py-2 px-4 border-b text-left">{{ $ticket->user->name }}</td>
                             <td class="py-2 px-4 border-b text-center">{{ $ticket->created_at->format('d/m/Y H:i') }}</td>
                             <td class="py-2 px-4 border-b text-center">
-                                <a href="{{ route('tickets.show', $ticket->id) }}" class="text-blue-500 hover:underline mr-2">
-                                    Ver
-                                </a>
-                                @can('update', $ticket)
-                                    <a href="{{ route('tickets.edit', $ticket->id) }}" class="text-green-500 hover:underline">
-                                        Editar
+                                <span class="flex flex-row justify-center">
+                                    <a title="{{ __('ticket.access_ticket') }}" href="{{ route('tickets.show', $ticket->id) }}" class="text-blue-500 hover:text-blue-800 mr-2">
+                                        <x-heroicon-o-eye class="w-5 h-5" />
                                     </a>
-                                @endcan
+                                    @can('update', $ticket)
+                                    <a title="{{ __('ticket.edit') }}" href="{{ route('tickets.edit', $ticket->id) }}" class="text-blue-500 hover:text-blue-800 mr-2">
+                                        <x-heroicon-o-pencil class="w-5 h-5" />
+                                    </a>
+                                    @endcan
+                                </span>
                             </td>
                         </tr>
                     @endforeach
@@ -174,16 +176,16 @@
 
                     <x-slot name="content">
                         <x-dropdown-link href="#" @click.prevent="selected = ''">
-                            {{ __('ticket.status_all') }}
+                            <x-ticket-status :status="'all'" />
                         </x-dropdown-link>
                         <x-dropdown-link href="#" @click.prevent="selected = 'open'">
-                            {{ __('ticket.status_open') }}
+                            <x-ticket-status :status="'open'" />
                         </x-dropdown-link>
                         <x-dropdown-link href="#" @click.prevent="selected = 'in_progress'">
-                            {{ __('ticket.status_in_progress') }}
+                            <x-ticket-status :status="'in_progress'" />
                         </x-dropdown-link>
                         <x-dropdown-link href="#" @click.prevent="selected = 'closed'">
-                            {{ __('ticket.status_closed') }}
+                            <x-ticket-status :status="'closed'" />
                         </x-dropdown-link>
                     </x-slot>
                 </x-dropdown>
@@ -209,16 +211,16 @@
 
                     <x-slot name="content">
                         <x-dropdown-link href="#" @click.prevent="selected = ''">
-                            {{ __('ticket.priority_all') }}
+                            <x-ticket-priority :priority="'all'" />
                         </x-dropdown-link>
                         <x-dropdown-link href="#" @click.prevent="selected = 'high'">
-                            {{ __('ticket.priority_high') }}
+                            <x-ticket-priority :priority="'high'" />
                         </x-dropdown-link>
                         <x-dropdown-link href="#" @click.prevent="selected = 'medium'">
-                            {{ __('ticket.priority_medium') }}
+                            <x-ticket-priority :priority="'medium'" />
                         </x-dropdown-link>
                         <x-dropdown-link href="#" @click.prevent="selected = 'low'">
-                            {{ __('ticket.priority_low') }}
+                            <x-ticket-priority :priority="'low'" />
                         </x-dropdown-link>
                     </x-slot>
                 </x-dropdown>

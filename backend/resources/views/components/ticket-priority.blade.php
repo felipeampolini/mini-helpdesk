@@ -1,4 +1,4 @@
-@props(['priority'])
+@props(['priority', 'size', 'margin'])
 
 @php
     $map = [
@@ -16,8 +16,11 @@
     $priorityData = $map[$priority] ?? [
         'class' => 'bg-gray-100 text-gray-800',
     ];
+
+    $sizeData = $size ?? 'text-xs';
+    $marginData = $margin ?? '';
 @endphp
 
-<span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {{ $priorityData['class'] }}">
+<span class="inline-flex items-center rounded-full px-2 py-0.5 font-medium {{ $marginData }} {{ $sizeData }} {{ $priorityData['class'] }}">
     {{ __('ticket.priority_'.$priority) }}
 </span>

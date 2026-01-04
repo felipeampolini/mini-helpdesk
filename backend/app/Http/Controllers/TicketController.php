@@ -3,16 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class TicketController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', Ticket::class);
+
         return view('tickets.index');
     }
 
@@ -22,6 +27,7 @@ class TicketController extends Controller
      */
     public function create()
     {
+        // regra de policy para esconder/mostrar botao dentro do blade
         return redirect()->route('tickets.index');
     }
 
@@ -30,7 +36,7 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // regra no livewire TicketCreateModal::createTicket
     }
 
     /**
@@ -38,7 +44,11 @@ class TicketController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $ticket = Ticket::findOrFail($id);
+
+        $this->authorize('view', $ticket);
+
+        return view('tickets.show', compact('ticket'));
     }
 
     /**
@@ -46,7 +56,11 @@ class TicketController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $ticket = Ticket::findOrFail($id);
+
+        $this->authorize('update', $ticket);
+
+        return view('tickets.edit', compact('ticket'));
     }
 
     /**
@@ -54,7 +68,7 @@ class TicketController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // regra no livewire TicketEdit::save
     }
 
     /**
@@ -62,6 +76,6 @@ class TicketController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // Nao implementado
     }
 }

@@ -24,12 +24,8 @@ class TicketCreateModal extends Component
         try {
             $this->authorize('create', Ticket::class);
         } catch (AuthorizationException $e) {
-            $this->dispatch('notify', [
-                'type' => 'danger',
-                'message' => 'Você não tem permissão para criar tickets.'
-            ]);
+            $this->warning(__("toast.unauthorized_ticket_create"));
             $this->dispatch('close-modal', 'new-ticket-modal');
-
             return;
         }
 
@@ -45,7 +41,7 @@ class TicketCreateModal extends Component
         $this->dispatch('close-modal', 'new-ticket-modal');
         $this->dispatch('ticketCreated');
 
-        $this->success(__("toast.ticket_crated"), ["id" => $ticket->id]);
+        $this->success(__("toast.ticket_created"), ["id" => $ticket->id]);
 
     }
 

@@ -57,6 +57,16 @@ class TicketPolicy
         return $user->role === 'user' && $ticket->user_id === $user->id;
     }
 
+    public function changePriority(User $user, Ticket $ticket)
+    {
+        if ($user->role === 'user') {
+            return false;
+        }
+
+        // Apenas o manager pode editar a priority de qualquer ticket
+        return true;
+    }
+
     public function comment(User $user, Ticket $ticket)
     {
         // Manager pode comentar em qualquer ticket

@@ -1,4 +1,4 @@
-@props(['status'])
+@props(['status', 'size', 'margin'])
 
 @php
     $map = [
@@ -16,8 +16,11 @@
     $statusData = $map[$status] ?? [
         'class' => 'bg-gray-100 text-gray-800',
     ];
+
+    $sizeData = $size ?? 'text-xs';
+    $marginData = $margin ?? '';
 @endphp
 
-<span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {{ $statusData['class'] }}">
+<span class="inline-flex items-center rounded-full px-2 py-0.5 font-medium {{ $sizeData }} {{ $marginData }} {{ $statusData['class'] }}">
     {{ __('ticket.status_'.$status) }}
 </span>

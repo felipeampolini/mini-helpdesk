@@ -44,6 +44,7 @@ class TicketTable extends Component
 
     public function render()
     {
+        // Verificacao dupla para evitar buscas de dados vindos do livewire.
         $this->authorize('viewAny', Ticket::class);
 
         $conditions = [];
