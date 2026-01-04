@@ -8,10 +8,13 @@ use App\Models\Ticket;
 use App\Services\Ticket\CreateTicketService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Livewire\Component;
+use Masmerise\Toaster\Toastable;
 use Validator;
 
 class TicketCreateModal extends Component
 {
+    use Toastable;
+
     public $title = '';
     public $description = '';
     public $priority = '';
@@ -42,10 +45,7 @@ class TicketCreateModal extends Component
         $this->dispatch('close-modal', 'new-ticket-modal');
         $this->dispatch('ticketCreated');
 
-        $this->dispatch('notify', [
-            'type' => 'success',
-            'message' => "Ticket criado! <a href='".route('tickets.show', $ticket)."' class='underline cursor-pointer'>Ir para o ticket</a>"
-        ]);
+        $this->success(__("toast.ticket_crated"), ["id" => $ticket->id]);
 
     }
 
