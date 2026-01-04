@@ -6,6 +6,8 @@ services:
     container_name: mini_helpdesk_app
     volumes:
       - ./backend:/var/www/html/backend
+      - /var/www/html/backend/node_modules
+      - /var/www/html/backend/vendor
     ports:
       - "8000:80"
     depends_on:
