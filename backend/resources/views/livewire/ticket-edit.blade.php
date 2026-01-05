@@ -1,25 +1,29 @@
 <div class="bg-white shadow-sm sm:rounded-lg p-6 space-y-4">
 
     <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
-        <div class="flex flex-col sm:flex-row sm:items-center gap-2">
-            <div class="flex items-center gap-2">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+            <div class="flex flex-col self-start">
+                <x-input-label :value="__('ticket.filter_status')" />
                 @can('changeStatus', $ticket)
                     <x-edit-ticket-status wire:model.defer="status" :status="$ticket->status" :size="'text-s'" />
                 @else
                     <x-ticket-status :status="$ticket->status" :size="'text-s'" />
                 @endcan
+            </div>
+            <div class="flex flex-col self-start">
+                <x-input-label :value="__('ticket.filter_priority')" />
                 @can('changePriority', $ticket)
                     <x-edit-ticket-priority wire:model.defer="priority" :priority="$ticket->priority" :size="'text-s'" />
                 @else
                     <x-ticket-priority :priority="$ticket->priority" :size="'text-s'" />
                 @endcan
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col self-start">
                 <x-input-label :value="__('ticket.title')" />
                 <x-text-input
                     id="title"
                     wire:model.defer="title"
-                    class="block w-full"
+                    class="block w-full md:w-96"
                     placeholder="{{ __('ticket.title_placeholder') }}"
                     value="{{ $ticket->title }}" />
                 @error('title')

@@ -18,8 +18,7 @@
     ];
 @endphp
 
-<div class="flex flex-col mt-2" x-data="{ selected: @entangle($attributes->wire('model')) }">
-    <x-input-label :value="__('ticket.filter_status')" />
+<div class="flex flex-col" x-data="{ selected: @entangle($attributes->wire('model')) }">
     <x-dropdown align="left" width="48">
         <x-slot name="trigger">
             <button type="button" class="border rounded px-3 py-2 w-full text-left flex">
