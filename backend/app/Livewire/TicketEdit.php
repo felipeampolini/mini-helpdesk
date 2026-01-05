@@ -56,6 +56,16 @@ class TicketEdit extends Component
             'priority' => auth()->user()->can('changePriority', $this->ticket) ? $this->priority : $this->ticket->priority,
         ];
 
+        $dirtyData = array_diff_assoc(
+            $data,
+            $this->ticket->only(array_keys($data))
+        );
+
+        if (empty($dirtyData)) {
+            $this->success(__('toast.ticket_no_changes'));
+            return $this->redirectRoute('tickets.show', $this->ticket->id);
+        }
+
         // Validação usando UpdateTicketRequest
         $validated = Validator::make(
             $this->ticket->toArray(),
