@@ -19,7 +19,7 @@
 
     <!-- Ticket Info -->
     <div class="bg-white shadow rounded p-6 space-y-4">
-        <strong>{{ __('ticket.description') }}</strong>
+        <h2 class="text-lg font-semibold mb-4">{{ __('ticket.description') }}</h2>
         <p class="text-gray-700"> {{ $ticket->description }}</p>
     </div>
 
@@ -31,9 +31,8 @@
         @endif
     </div>
 
-    {{-- <div class="bg-white shadow rounded p-6">
-        <h2 class="text-lg font-semibold mb-4">Comentários</h2>
-        <p class="text-gray-500">Aqui virá o componente de comentários Livewire.</p>
-    </div> --}}
+    <div class="bg-white shadow rounded p-6">
+        <livewire:ticket-comments :ticket="$ticket" :showHeader="true" :allowComment="true" />
+    </div>
 
 </div>

@@ -62,9 +62,4 @@
         @endif
     </div>
 
-    {{-- <div class="bg-white shadow rounded p-6">
-        <h2 class="text-lg font-semibold mb-4">Comentários</h2>
-        <p class="text-gray-500">Aqui virá o componente de comentários Livewire.</p>
-    </div> --}}
-
 </div>
