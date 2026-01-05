@@ -101,6 +101,11 @@ class TicketTable extends Component
                     WHEN 'closed' THEN 3
                 END {$this->sortDirection}
             ");
+        }elseif($this->sortField === 'owner') {
+            $conditions[] = fn($query) =>
+                $query->join('users', 'users.id', '=', 'tickets.user_id')
+                    ->orderBy('users.name', $this->sortDirection)
+                    ->select('tickets.*');
         }else{
             $conditions[] = fn($query) => $query->orderBy($this->sortField, $this->sortDirection);
         }
