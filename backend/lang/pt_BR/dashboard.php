@@ -1,0 +1,10 @@
+<?php
+
+return [
+    'open' => "Abertos",
+    'in_progress' => "Em andamento",
+    'closed' => "Fechados",
+    'priority_low' => 'Baixa',
+    'priority_medium' => 'Média',
+    'priority_high' => 'Alta',
+];
