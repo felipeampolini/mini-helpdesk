@@ -41,11 +41,22 @@
         <div class="bg-white p-4 rounded-lg shadow mt-6">
             <div class="text-sm text-gray-500">
                 {{ __('dashboard.tickets_created_by') }}:
-                <button wire:click="$set('period', 'day')" class="ml-2 btn px-2 py-1 rounded-full {{ $period == 'day' ? 'bg-white shadow-sm' : 'bg-gray-100 shadow-md' }}">{{ __('dashboard.days') }}</button>
-                <button wire:click="$set('period', 'month')" class="btn px-2 py-1 rounded-full {{ $period == 'month' ? 'bg-white shadow-sm' : 'bg-gray-100 shadow-md' }}">{{ __('dashboard.months') }}</button>
+                <button wire:click="$set('periodBarPriorityChart', 'day')" class="ml-2 btn px-2 py-1 rounded-full {{ $periodBarPriorityChart == 'day' ? 'bg-white shadow-sm' : 'bg-gray-100 shadow-md' }}">{{ __('dashboard.days') }}</button>
+                <button wire:click="$set('periodBarPriorityChart', 'month')" class="btn px-2 py-1 rounded-full {{ $periodBarPriorityChart == 'month' ? 'bg-white shadow-sm' : 'bg-gray-100 shadow-md' }}">{{ __('dashboard.months') }}</button>
             </div>
             <div wire:ignore class="relative w-full mt-1">
-                <canvas id="ticketsChart"></canvas>
+                <canvas id="barPriorityChart"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-lg shadow mt-6">
+            <div class="text-sm text-gray-500">
+                {{ __('dashboard.number_tickets_open_closed') }}:
+                <button wire:click="$set('periodBarStatusChart', 'day')" class="ml-2 btn px-2 py-1 rounded-full {{ $periodBarStatusChart == 'day' ? 'bg-white shadow-sm' : 'bg-gray-100 shadow-md' }}">{{ __('dashboard.days') }}</button>
+                <button wire:click="$set('periodBarStatusChart', 'month')" class="btn px-2 py-1 rounded-full {{ $periodBarStatusChart == 'month' ? 'bg-white shadow-sm' : 'bg-gray-100 shadow-md' }}">{{ __('dashboard.months') }}</button>
+            </div>
+            <div wire:ignore class="relative w-full mt-1">
+                <canvas id="barStatusChart"></canvas>
             </div>
         </div>
 
@@ -53,18 +64,19 @@
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
             <script>
-                let ticketsChart;
+                let barPriorityChart;
+                let barStatusChart;
 
-                function bootChart(data) {
+                function bootBarPriorityChart(data) {
 
-                    const el = document.getElementById('ticketsChart');
+                    const el = document.getElementById('barPriorityChart');
                     if (!el) return;
 
-                    if (ticketsChart) {
-                        ticketsChart.destroy();
+                    if (barPriorityChart) {
+                        barPriorityChart.destroy();
                     }
 
-                    ticketsChart = new Chart(el, {
+                    barPriorityChart = new Chart(el, {
                         type: 'bar',
                         data: {
                             labels: data.labels,
@@ -105,9 +117,45 @@
                     });
                 }
 
+                function bootBarStatusChart(data) {
+
+                    const el = document.getElementById('barStatusChart');
+                    if (!el) return;
+
+                    if (barStatusChart) {
+                        barStatusChart.destroy();
+                    }
+
+                    barStatusChart = new Chart(el, {
+                        type: 'bar',
+                        data: {
+                            labels: data.labels,
+                            datasets: [
+                                {
+                                    label: '{{ __("dashboard.open") }}',
+                                    data: data.open,
+                                    backgroundColor: 'rgba(220, 252, 231, 0.9)', // green-100
+                                    borderColor: 'rgba(22, 163, 74, 1)', // green-800
+                                    borderWidth: 1,
+                                },
+                                {
+                                    label: '{{ __("dashboard.closed") }}',
+                                    data: data.closed,
+                                    backgroundColor: 'rgba(209, 213, 219, 0.9)', // gray-300
+                                    borderColor: 'rgba(31, 41, 55, 1)', // gray-800
+                                    borderWidth: 1,
+                                }
+                            ]
+                        }
+                    });
+                }
+
                 document.addEventListener('livewire:init', () => {
-                    Livewire.on('chart-updated', (payload) => {
-                        bootChart(payload.chartData);
+                    Livewire.on('barPriorityChart-updated', (payload) => {
+                        bootBarPriorityChart(payload.barPriorityChartData);
+                    });
+                    Livewire.on('barStatusChart-updated', (payload) => {
+                        bootBarStatusChart(payload.barStatusChartData);
                     });
                 });
 

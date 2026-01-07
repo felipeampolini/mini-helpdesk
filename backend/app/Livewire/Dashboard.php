@@ -9,8 +9,10 @@ use Livewire\Component;
 
 class Dashboard extends Component
 {
-    public string $period = 'day'; // day | month
-    public array $chartData = [];
+    public string $periodBarPriorityChart = 'day'; // day | month
+    public string $periodBarStatusChart = 'day'; // day | month
+    public array $barPriorityChartData = [];
+    public array $barStatusChartData = [];
 
     public function render()
     {
@@ -31,11 +33,11 @@ class Dashboard extends Component
         ]);
     }
 
-    public function loadChartData()
+    public function loadBarPriorityChartData()
     {
         $user = auth()->user();
 
-        $periodExpression = match ($this->period) {
+        $periodExpression = match ($this->periodBarPriorityChart) {
             'month' => "DATE_TRUNC('month', created_at)",
             default => "DATE(created_at)",
         };
@@ -52,23 +54,54 @@ class Dashboard extends Component
             ->orderByRaw($periodExpression)
             ->get();
 
-        $this->chartData = $this->normalizeChartData($rows);
+        $this->barPriorityChartData = $this->normalizeBarPriorityChartData($rows);
     }
 
-    protected function refreshChart()
+    public function loadBarStatusChartData()
     {
-        $this->loadChartData();
-        $this->dispatch('chart-updated', chartData: $this->chartData);
+        $user = auth()->user();
+
+        $periodExpression = match ($this->periodBarStatusChart) {
+            'month' => "DATE_TRUNC('month', created_at)",
+            default => "DATE(created_at)",
+        };
+
+        $query = Ticket::query()
+            ->selectRaw("$periodExpression as period, status, count(*) as total");
+
+        if ($user->role === 'user') {
+            $query->where('user_id', $user->id);
+        }
+
+        $rows = $query
+            ->groupByRaw("$periodExpression, status")
+            ->orderByRaw($periodExpression)
+            ->get();
+
+        $this->barStatusChartData = $this->normalizeBarStatusChartData($rows);
+    }
+
+    protected function refreshCharts()
+    {
+        $this->loadBarPriorityChartData();
+        $this->loadBarStatusChartData();
+        $this->dispatch('barPriorityChart-updated', barPriorityChartData: $this->barPriorityChartData);
+        $this->dispatch('barStatusChart-updated', barStatusChartData: $this->barStatusChartData);
     }
 
     public function mount()
     {
-        $this->refreshChart();
+        $this->refreshCharts();
     }
 
-    public function updatedPeriod()
+    public function updatedPeriodBarPriorityChart()
     {
-        $this->refreshChart();
+        $this->refreshCharts();
+    }
+
+    public function updatedPeriodBarStatusChart()
+    {
+        $this->refreshCharts();
     }
 
     private function normalizeStats($stats)
@@ -84,7 +117,7 @@ class Dashboard extends Component
         return $stats;
     }
 
-    private function normalizeChartData($rows)
+    private function normalizeBarPriorityChartData($rows)
     {
         $labels = [];
         $high = [];
@@ -93,11 +126,11 @@ class Dashboard extends Component
 
         $grouped = $rows->groupBy(fn ($row) => $row->period);
 
-        foreach ($grouped as $period => $items) {
+        foreach ($grouped as $periodBarPriorityChart => $items) {
 
-            $date = Carbon::parse($period);
+            $date = Carbon::parse($periodBarPriorityChart);
 
-            $labels[] = match ($this->period) {
+            $labels[] = match ($this->periodBarPriorityChart) {
                 'month' => $date->format('m/Y'),
                 default => $date->format('d/m/Y'),
             };
@@ -112,6 +145,33 @@ class Dashboard extends Component
             'high' => $high,
             'medium' => $medium,
             'low' => $low,
+        ];
+    }
+
+    private function normalizeBarStatusChartData($rows)
+    {
+        $labels = [];
+        $open = [];
+        $closed = [];
+
+        $grouped = $rows->groupBy(fn ($row) => $row->period);
+
+        foreach ($grouped as $periodBarStatusChart => $items) {
+            $date = Carbon::parse($periodBarStatusChart);
+
+            $labels[] = match ($this->periodBarStatusChart) {
+                'month' => $date->format('M/Y'),
+                default => $date->format('d/m/Y'),
+            };
+
+            $open[] = $items->firstWhere('status', 'open')->total ?? 0;
+            $closed[] = $items->firstWhere('status', 'closed')->total ?? 0;
+        }
+
+        return [
+            'labels' => $labels,
+            'open' => $open,
+            'closed' => $closed,
         ];
     }
 }

@@ -10,4 +10,5 @@ return [
     'days' => 'Dias',
     'months' => 'Meses',
     'tickets_created_by' => "Tickets criados por",
+    'number_tickets_open_closed' => "Total de tickets abertos/fechados por",
 ];
