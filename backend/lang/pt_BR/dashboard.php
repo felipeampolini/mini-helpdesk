@@ -7,4 +7,7 @@ return [
     'priority_low' => 'Baixa',
     'priority_medium' => 'Média',
     'priority_high' => 'Alta',
+    'days' => 'Dias',
+    'months' => 'Meses',
+    'tickets_created_by' => "Tickets criados por",
 ];
