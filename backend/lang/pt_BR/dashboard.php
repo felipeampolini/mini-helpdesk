@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'dashboard' => 'Dashboard',
     'open' => "Abertos",
     'in_progress' => "Em andamento",
     'closed' => "Fechados",
