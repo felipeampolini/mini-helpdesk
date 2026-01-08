@@ -24,7 +24,6 @@ class TicketTable extends Component
     public $filterStatus = '';
     public $filterPriority = '';
     public $filterOwner = '';
-    public $owner = '';
 
     public $dateFrom = '';
     public $dateTo = '';
@@ -38,7 +37,6 @@ class TicketTable extends Component
         $this->search = '';
         $this->filterStatus = '';
         $this->filterPriority = '';
-        $this->owner = '';
 
         $this->dateFrom = '';
         $this->dateTo = '';
@@ -58,9 +56,22 @@ class TicketTable extends Component
             $conditions[] = fn($query) => $query->where('user_id', auth()->id());
         }
 
-        // Busca por título
+        // Busca por texto
         if($this->search) {
-            $conditions[] = fn($query) => $query->where('title', 'ilike', "%{$this->search}%");
+            $search = $this->search;
+
+            $conditions[] = fn ($query) =>
+                $query->where(function ($q) use ($search) {
+                        $q->where('title', 'ilike', "%{$search}%")
+                        ->orWhere('description', 'ilike', "%{$search}%")
+                        ->orWhereHas('user', fn ($u) =>
+                            $u->where('name', 'ilike', "%{$search}%")
+                    );
+                    if (ctype_digit($search)) {
+                        $q->orWhere('ticket.id', (int) $search);
+                    }
+                });
+
         }
 
         // Filtro de status
@@ -71,13 +82,6 @@ class TicketTable extends Component
         // Filtro de prioridade
         if($this->filterPriority) {
             $conditions[] = fn($query) => $query->where('priority', $this->filterPriority);
-        }
-
-        // Filtro de dono
-        if($this->owner) {
-            $conditions[] = fn($query) => $query->whereHas('user', fn($q) =>
-                $q->where('name', 'ilike', "%{$this->owner}%")
-            );
         }
 
         // Filtro de datas
@@ -155,7 +159,6 @@ class TicketTable extends Component
         $count = 0;
 
         $count += (int) (bool) $this->search;
-        $count += (int) (bool) $this->owner;
         $count += (int) (bool) $this->filterStatus;
         $count += (int) (bool) $this->filterPriority;
         $count += (int) (bool) $this->dateFrom;

@@ -155,7 +155,7 @@
                 </h2>
             </span>
 
-            <!-- Busca por título -->
+            <!-- Busca por título/dono/numero -->
             <div class="flex flex-col mt-2">
                 <x-input-label for="search" :value="__('ticket.search_ticket')" />
                 <x-text-input
@@ -163,16 +163,6 @@
                     wire:model="search"
                     class="block mt-1 w-full"
                     :placeholder="__('ticket.search_ticket_placeholder')" />
-            </div>
-
-            <!-- Dono -->
-            <div class="flex flex-col mt-2">
-                <x-input-label for="owner" :value="__('ticket.search_owner')" />
-                <x-text-input
-                    id="owner"
-                    wire:model="owner"
-                    class="block mt-1 w-full"
-                    :placeholder="__('ticket.search_owner_placeholder')" />
             </div>
 
             <!-- Status -->

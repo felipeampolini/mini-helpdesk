@@ -14,11 +14,8 @@ return [
     'priority_select' => 'Selecione uma prioridade',
     'create' => 'Salvar',
 
-    'search_ticket' => 'Buscar ticket',
-    'search_ticket_placeholder' => "Digite um título",
-
-    'search_owner' => 'Buscar dono',
-    'search_owner_placeholder' => "Ex: Felipe, Mariana",
+    'search_ticket' => 'Busca por texto',
+    'search_ticket_placeholder' => "Título, frase, nome, ID",
 
     'filter_status' => 'Status',
     'status_all' => 'Todos',
