@@ -45,7 +45,7 @@ class TicketShow extends Component
         try {
             $action->execute($this->ticket, 'in_progress');
 
-            $this->success(__('toast.ticket_started'));
+            $this->success(__('toast.ticket_started', ["id" => $this->ticket->id]));
         } catch (AuthorizationException) {
             $this->warning(__('toast.unauthorized_start_ticket'));
         } catch (InvalidArgumentException) {
@@ -58,7 +58,7 @@ class TicketShow extends Component
         try {
             $action->execute($this->ticket, 'closed');
 
-            $this->success(__('toast.ticket_closed'));
+            $this->success(__('toast.ticket_closed'), ["id" => $this->ticket->id]);
         } catch (AuthorizationException) {
             $this->warning(__('toast.unauthorized_close_ticket'));
         } catch (InvalidArgumentException) {
@@ -71,7 +71,7 @@ class TicketShow extends Component
         try {
             $action->execute($this->ticket, 'open');
 
-            $this->success(__('toast.ticket_reopened'));
+            $this->success(__('toast.ticket_reopened'), ["id" => $this->ticket->id]);
         } catch (AuthorizationException) {
             $this->warning(__('toast.unauthorized_reopen_ticket'));
         } catch (InvalidArgumentException) {

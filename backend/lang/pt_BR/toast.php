@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'ticket_created' => "Ticket Nº :id criado!",
-    'ticket_updated' => "Ticket Nº :id atualizado!",
+    'ticket_created' => "Ticket #:id criado!",
+    'ticket_updated' => "Ticket #:id atualizado!",
     'comment_created' => "Comentário criado!",
     'ticket_no_changes' => "Nada para salvar.",
 
@@ -12,9 +12,9 @@ return [
     'unauthorized_close_ticket' => 'Você não tem permissão para fechar este ticket.',
     'unauthorized_reopen_ticket' => 'Você não tem permissão para reabrir este ticket.',
 
-    'ticket_started' => 'Ticket iniciado com sucesso.',
-    'ticket_closed' => 'Ticket fechado com sucesso.',
-    'ticket_reopened' => 'Ticket reaberto com sucesso.',
+    'ticket_started' => 'Ticket #:id iniciado com sucesso.',
+    'ticket_closed' => 'Ticket #:id fechado com sucesso.',
+    'ticket_reopened' => 'Ticket #:id reaberto com sucesso.',
 
     'invalid_ticket_status_transition' => 'Ação não permitida para o status atual do ticket.',
 ];
