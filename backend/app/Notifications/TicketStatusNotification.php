@@ -2,24 +2,25 @@
 
 namespace App\Notifications;
 
+use App\Events\TicketStatusChanged;
 use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class TicketCreatedNotification extends Notification
+class TicketStatusNotification extends Notification
 {
     use Queueable;
 
-    public Ticket $ticket;
+    public TicketStatusChanged $event;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Ticket $ticket)
+    public function __construct(TicketStatusChanged $event)
     {
-        $this->ticket = $ticket;
+        $this->event = $event;
     }
 
     /**
@@ -37,16 +38,14 @@ class TicketCreatedNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $url = route('tickets.show', $this->ticket);
+        $url = route('tickets.show', $this->event->ticket);
 
         return (new MailMessage)
-            ->subject("Ticket #{$this->ticket->id} Criado: {$this->ticket->title}")
+            ->subject("Status do Ticket #{$this->event->ticket->id} atualizado")
             ->greeting("Olá {$notifiable->name},")
-            ->line("Seu ticket foi criado com sucesso.")
-            ->line("Título: {$this->ticket->title}")
-            ->line("Descrição: {$this->ticket->description}")
-            ->line("Prioridade: ".ucfirst($this->ticket->priority))
-            ->line("Status: ".ucfirst($this->ticket->status))
+            ->line("O Status do ticket #{$this->event->ticket->id} foi atualizado.")
+            ->line("De: {$this->event->from}")
+            ->line("Para: {$this->event->to}")
             ->action('Ver Ticket', $url)
             ->line('Obrigado por usar nosso sistema!')
             ->level("success");

@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Events\TicketStatusChanged;
 use App\Models\Ticket;
 use Gate;
 use InvalidArgumentException;
@@ -24,9 +25,17 @@ class TicketStatusAction
             throw new InvalidArgumentException();
         }
 
+        $fromStatus = $ticket->status;
+
         $ticket->update([
             'status' => $toStatus,
         ]);
+
+        event(new TicketStatusChanged(
+            $ticket,
+            $fromStatus,
+            $toStatus
+        ));
     }
 
     private function canTransition(string $from, string $to): bool
