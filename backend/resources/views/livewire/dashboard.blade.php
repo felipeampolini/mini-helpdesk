@@ -84,7 +84,7 @@
                                 {
                                     label: '{{ __("dashboard.priority_high") }}',
                                     data: data.high,
-                                    backgroundColor: 'rgba(254, 226, 226, 0.9)', // red-100
+                                    backgroundColor: '#FF9E99', // red-100
                                     borderColor: 'rgb(153, 27, 27)', // red-800
                                     borderWidth: 1,
                                 },
@@ -98,7 +98,7 @@
                                 {
                                     label: '{{ __("dashboard.priority_low") }}',
                                     data: data.low,
-                                    backgroundColor: 'rgba(219, 234, 254, 0.9)', // blue-100
+                                    backgroundColor: '#B3EBF2', // blue-100
                                     borderColor: 'rgb(30, 64, 175)', // blue-800
                                     borderWidth: 1,
                                 },
@@ -134,7 +134,7 @@
                                 {
                                     label: '{{ __("dashboard.open") }}',
                                     data: data.open,
-                                    backgroundColor: 'rgba(220, 252, 231, 0.9)', // green-100
+                                    backgroundColor: '#8bdf93', // green-100
                                     borderColor: 'rgba(22, 163, 74, 1)', // green-800
                                     borderWidth: 1,
                                 },
