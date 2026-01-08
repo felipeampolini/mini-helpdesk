@@ -68,7 +68,7 @@ class TicketTable extends Component
                             $u->where('name', 'ilike', "%{$search}%")
                     );
                     if (ctype_digit($search)) {
-                        $q->orWhere('ticket.id', (int) $search);
+                        $q->orWhere('tickets.id', (int) $search);
                     }
                 });
 
