@@ -2,17 +2,20 @@
 
 namespace App\Livewire;
 
+use App\Actions\TicketStatusAction;
 use App\Models\Ticket;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Masmerise\Toaster\Toastable;
 
 class TicketTable extends Component
 {
     use WithPagination;
     use AuthorizesRequests;
+    use Toastable;
 
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
@@ -172,4 +175,48 @@ class TicketTable extends Component
         }
     }
 
+    public function startTicket(TicketStatusAction $action, int $ticketId)
+    {
+        $ticket = Ticket::findOrFail($ticketId);
+
+        try {
+            $action->execute($ticket, 'in_progress');
+
+            $this->success(__('toast.ticket_started'));
+        } catch (AuthorizationException) {
+            $this->warning(__('toast.unauthorized_start_ticket'));
+        } catch (InvalidArgumentException) {
+            $this->warning(__('toast.invalid_ticket_status_transition'));
+        }
+    }
+
+    public function closeTicket(TicketStatusAction $action, int $ticketId)
+    {
+        $ticket = Ticket::findOrFail($ticketId);
+
+        try {
+            $action->execute($ticket, 'closed');
+
+            $this->success(__('toast.ticket_closed'));
+        } catch (AuthorizationException) {
+            $this->warning(__('toast.unauthorized_close_ticket'));
+        } catch (InvalidArgumentException) {
+            $this->warning(__('toast.invalid_ticket_status_transition'));
+        }
+    }
+
+    public function reopenTicket(TicketStatusAction $action, int $ticketId)
+    {
+        $ticket = Ticket::findOrFail($ticketId);
+
+        try {
+            $action->execute($ticket, 'open');
+
+            $this->success(__('toast.ticket_reopened'));
+        } catch (AuthorizationException) {
+            $this->warning(__('toast.unauthorized_reopen_ticket'));
+        } catch (InvalidArgumentException) {
+            $this->warning(__('toast.invalid_ticket_status_transition'));
+        }
+    }
 }

@@ -4,7 +4,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center gap-4">
             <div class="flex flex-col self-start">
                 <x-input-label :value="__('ticket.filter_status')" />
-                @can('changeStatus', $ticket)
+                @can('changeAnyStatus', $ticket)
                     <x-edit-ticket-status wire:model.defer="status" :status="$ticket->status" :size="'text-s'" />
                 @else
                     <x-ticket-status :status="$ticket->status" :size="'text-s'" />

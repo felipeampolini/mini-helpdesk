@@ -104,12 +104,31 @@
                             <td class="py-2 px-4 border-b text-center">
                                 <span class="flex flex-row justify-center">
                                     <a title="{{ __('ticket.access_ticket') }}" href="{{ route('tickets.show', $ticket->id) }}" class="text-blue-500 hover:text-blue-800 mr-2">
-                                        <x-heroicon-o-eye class="w-5 h-5" />
+                                        <x-heroicon-s-eye class="w-5 h-5" />
                                     </a>
                                     @can('update', $ticket)
                                     <a title="{{ __('ticket.edit') }}" href="{{ route('tickets.edit', $ticket->id) }}" class="text-blue-500 hover:text-blue-800 mr-2">
-                                        <x-heroicon-o-pencil class="w-5 h-5" />
+                                        <x-heroicon-s-pencil class="w-5 h-5" />
                                     </a>
+                                    @endcan
+                                    @can('changeStatus', $ticket)
+                                        @if ($ticket->status === 'open')
+                                            <a title="{{ __('ticket.start_ticket') }}" wire:click="startTicket({{ $ticket->id }})" class="text-green-500 hover:text-green-800 mr-2">
+                                                <x-heroicon-s-play class="w-5 h-5" />
+                                            </a>
+                                        @endif
+
+                                        @if ($ticket->status === 'in_progress')
+                                            <a title="{{ __('ticket.close_ticket') }}" wire:click="closeTicket({{ $ticket->id }})" class="text-red-500 hover:text-red-800 mr-2">
+                                                <x-heroicon-s-lock-closed class="w-5 h-5" />
+                                            </a>
+                                        @endif
+
+                                        @if ($ticket->status === 'closed')
+                                            <a title="{{ __('ticket.reopen_ticket') }}" wire:click="reopenTicket({{ $ticket->id }})" class="text-amber-500 hover:text-amber-800 mr-2">
+                                                <x-heroicon-s-arrow-path class="w-5 h-5" />
+                                            </a>
+                                        @endif
                                     @endcan
                                 </span>
                             </td>

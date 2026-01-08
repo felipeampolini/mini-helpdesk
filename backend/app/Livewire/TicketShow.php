@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Actions\TicketStatusAction;
 use App\Models\Ticket;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
@@ -36,5 +37,44 @@ class TicketShow extends Component
 
         return $this->redirectRoute('tickets.edit', $this->ticket->id);
 
+    }
+
+    public function startTicket(TicketStatusAction $action)
+    {
+        try {
+            $action->execute($this->ticket, 'in_progress');
+
+            $this->success(__('toast.ticket_started'));
+        } catch (AuthorizationException) {
+            $this->warning(__('toast.unauthorized_start_ticket'));
+        } catch (InvalidArgumentException) {
+            $this->warning(__('toast.invalid_ticket_status_transition'));
+        }
+    }
+
+    public function closeTicket(TicketStatusAction $action)
+    {
+        try {
+            $action->execute($this->ticket, 'closed');
+
+            $this->success(__('toast.ticket_closed'));
+        } catch (AuthorizationException) {
+            $this->warning(__('toast.unauthorized_close_ticket'));
+        } catch (InvalidArgumentException) {
+            $this->warning(__('toast.invalid_ticket_status_transition'));
+        }
+    }
+
+    public function reopenTicket(TicketStatusAction $action)
+    {
+        try {
+            $action->execute($this->ticket, 'open');
+
+            $this->success(__('toast.ticket_reopened'));
+        } catch (AuthorizationException) {
+            $this->warning(__('toast.unauthorized_reopen_ticket'));
+        } catch (InvalidArgumentException) {
+            $this->warning(__('toast.invalid_ticket_status_transition'));
+        }
     }
 }

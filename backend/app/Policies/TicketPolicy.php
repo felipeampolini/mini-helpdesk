@@ -57,6 +57,16 @@ class TicketPolicy
         return $user->role === 'user' && $ticket->user_id === $user->id;
     }
 
+    public function changeAnyStatus(User $user, Ticket $ticket)
+    {
+        if ($user->role === 'user') {
+            return false;
+        }
+
+        // Manager pode alterar qualquer status de qualquer ticket
+        return true;
+    }
+
     public function changePriority(User $user, Ticket $ticket)
     {
         if ($user->role === 'user') {

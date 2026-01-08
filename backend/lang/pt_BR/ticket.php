@@ -54,6 +54,10 @@ return [
     'edit' => 'Editar',
     'save' => 'Salvar',
     'created_by' => 'Criado por',
-    'updated_at' => 'Atualizado em'
+    'updated_at' => 'Atualizado em',
+
+    'start_ticket' => 'Iniciar ticket',
+    'reopen_ticket' => 'Reabrir ticket',
+    'close_ticket' => 'Fechar ticket',
 
 ];

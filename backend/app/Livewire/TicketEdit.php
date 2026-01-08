@@ -52,7 +52,7 @@ class TicketEdit extends Component
         $data = [
             'title' => $this->title,
             'description' => $this->description,
-            'status' => auth()->user()->can('changeStatus', $this->ticket) ? $this->status : $this->ticket->status,
+            'status' => auth()->user()->can('changeAnyStatus', $this->ticket) ? $this->status : $this->ticket->status,
             'priority' => auth()->user()->can('changePriority', $this->ticket) ? $this->priority : $this->ticket->priority,
         ];
 
@@ -73,7 +73,7 @@ class TicketEdit extends Component
         )->validate();
 
         // Apenas atualiza status e prioridade se o usuário tiver permissão
-        if (! auth()->user()->can('changeStatus', $this->ticket)) {
+        if (! auth()->user()->can('changeAnyStatus', $this->ticket)) {
             unset($validated['status']);
         }
 
