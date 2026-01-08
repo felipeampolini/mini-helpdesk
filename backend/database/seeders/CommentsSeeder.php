@@ -16,14 +16,15 @@ class CommentsSeeder extends Seeder
     public function run(): void
     {
         $tickets = Ticket::all();
-        $users = User::all(); // manager + users
+        $managers = User::where('role', 'manager')->get();
 
         foreach ($tickets as $ticket) {
-            // Cada ticket recebe 1 a 5 comentários
+            $possibleAuthors = $managers->push($ticket->user);
             $numComments = rand(1, 5);
 
             for ($i = 0; $i < $numComments; $i++) {
-                $user = $users->random();
+
+                $user = $possibleAuthors->random();
 
                 Comment::factory()->create([
                     'ticket_id' => $ticket->id,
