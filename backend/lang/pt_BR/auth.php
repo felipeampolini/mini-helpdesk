@@ -15,6 +15,7 @@ return [
     'name_label' => 'Nome',
     'password_confirmation_label' => 'Confirmar senha',
     'already_registered_label' => 'Já possui cadastro?',
+    'never_registered_label' => 'Novo por aqui? Cadastre-se!',
     'register_label' => 'Cadastrar',
     'reset_password_label' => 'Redefinir senha',
     'verify_email_description' => 'Obrigado por se cadastrar! Antes de começar, confirme seu endereço de e-mail clicando no link que acabamos de enviar. Caso não tenha recebido o e-mail, enviaremos outro para você.',
