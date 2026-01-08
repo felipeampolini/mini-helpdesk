@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Actions\TicketStatusAction;
 use App\Models\Ticket;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use InvalidArgumentException;
 use Livewire\Component;
 use Masmerise\Toaster\Toastable;
 

@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use InvalidArgumentException;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Masmerise\Toaster\Toastable;
