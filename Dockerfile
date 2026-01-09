@@ -1,8 +1,8 @@
 FROM php:8.2-fpm
 
-# Instala dependências do sistema
+# Instala dependências do sistema e o utilitário dos2unix
 RUN apt-get update && apt-get install -y \
-    git unzip curl libpq-dev libonig-dev libzip-dev zip nginx \
+    git unzip curl libpq-dev libonig-dev libzip-dev zip nginx dos2unix \
     && docker-php-ext-install pdo pdo_pgsql mbstring zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -22,7 +22,7 @@ RUN composer install --no-interaction --no-scripts --no-autoloader \
 # Copia o restante do código
 COPY backend/ ./
 
-# Configuração do Nginx (Movido para um bloco mais limpo)
+# Configuração do Nginx
 RUN rm -f /etc/nginx/sites-enabled/default
 COPY .docker/nginx/laravel.conf /etc/nginx/sites-enabled/laravel.conf
 
@@ -32,7 +32,9 @@ RUN chown -R www-data:www-data /var/www/html/backend \
 
 # Copia o script que vai automatizar tudo ao subir
 COPY .docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Corrige quebras de linha do Windows e dá permissão de execução
+RUN dos2unix /usr/local/bin/entrypoint.sh && chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 80
 
