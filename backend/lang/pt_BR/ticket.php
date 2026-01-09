@@ -7,7 +7,7 @@ return [
 
     'new_ticket' => 'Novo ticket',
     'filters' => 'Filtros',
-    'clean_search' => 'Limpar',
+    'clean_search' => 'Limpar Filtros',
 
     'title_placeholder' => 'Digite um título',
     'description_placeholder' => 'Digite uma descrição',

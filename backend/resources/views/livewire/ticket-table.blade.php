@@ -13,10 +13,10 @@
                 ({{ $this->activeFiltersCount }})
             @endif
         </x-secondary-button>
-        <x-danger-button wire:click="clearSearch">
-            <x-heroicon-o-trash class="w-5 h-5 mr-2" />
+        <x-warning-button wire:click="clearSearch">
+            <x-heroicon-o-arrow-path class="w-5 h-5 mr-2" />
             {{ __('ticket.clean_search') }}
-        </x-danger-button>
+        </x-warning-button>
     </div>
 
     <div class="relative">
