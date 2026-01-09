@@ -55,51 +55,17 @@ cd mini-helpdesk
 ### 2. Subir os containers
 
 ```bash
-docker compose up -d
+docker compose up -d --build
 ```
 
-### 3. Instalar dependências
+### 3. Acesso
 
-```bash
-docker compose exec app composer install --no-interaction --optimize-autoloader
-docker compose exec app npm install
-docker compose exec app npm run build
-docker compose exec app php artisan livewire:publish --assets
-```
-
-### 4. Criar arquivo `.env`
-
-```bash
-docker compose exec app cp .env.example .env
-```
-> Esse é o arquivo `.env` do laravel dentro da pasta `backend`
-
-### 5. Gerar a chave da aplicação
-
-```bash
-docker compose exec app php artisan key:generate
-```
-
-### 6. Rodar migrations e seeders
-
-```bash
-docker compose exec app php artisan migrate --seed
-```
-
-### 7. Ajustar permissões
-
-```bash
-docker compose exec app chown -R www-data:www-data storage bootstrap/cache
-docker compose exec app chmod -R 775 storage
-```
-
-### 8. Acesso à aplicação
-
-Após subir o ambiente, acesse no navegador:
+Aguarde alguns segundos/minutos para o primeiro build e acesse:
 
 ```
 http://localhost:8000
 ```
+>O processo de build inicial (instalação de dependências, migrações e seeders) é executado automaticamente no startup do container.
 
 ### 9. Credenciais para teste
 
